@@ -19,13 +19,12 @@ models:
       - name: rfm_segment
         data_tests:
           - accepted_values:
-              arguments:
-                values:
-                  - champions
-                  - loyal_high_value
-                  - at_risk_high_value
-                  - one_time_buyer
-                  - standard
+              values:
+                - champions
+                - loyal_high_value
+                - at_risk_high_value
+                - one_time_buyer
+                - standard
 
   - name: mart_retention_cohort
     description: Monthly customer cohort retention.

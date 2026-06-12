@@ -30,6 +30,8 @@ TRANSACTION_TABLES = {
     "raw_olist_order_reviews",
 }
 
+STATIC_REFERENCE_TABLES = set(CSV_TABLES.values()) - TRANSACTION_TABLES
+
 
 def get_engine():
     load_dotenv()
@@ -116,6 +118,10 @@ def load_table(
     df = read_csv(csv_path)
 
     if load_mode == "batch":
+        if table_name in STATIC_REFERENCE_TABLES:
+            print(f"Skipping {table_name} in batch mode; static reference table")
+            return
+
         if batch_date is None:
             raise ValueError("batch mode requires --batch-date")
         df = filter_batch(table_name, df, orders_df, batch_date)

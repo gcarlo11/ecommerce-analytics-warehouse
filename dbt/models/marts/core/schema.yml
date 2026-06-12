@@ -51,16 +51,15 @@ models:
       - name: order_status
         data_tests:
           - accepted_values:
-              arguments:
-                values:
-                  - delivered
-                  - shipped
-                  - canceled
-                  - unavailable
-                  - invoiced
-                  - processing
-                  - created
-                  - approved
+              values:
+                - delivered
+                - shipped
+                - canceled
+                - unavailable
+                - invoiced
+                - processing
+                - created
+                - approved
 
   - name: fact_order_items
     description: One row per item inside an order.
@@ -83,13 +82,12 @@ models:
       - name: payment_type
         data_tests:
           - accepted_values:
-              arguments:
-                values:
-                  - credit_card
-                  - boleto
-                  - voucher
-                  - debit_card
-                  - not_defined
+              values:
+                - credit_card
+                - boleto
+                - voucher
+                - debit_card
+                - not_defined
 
   - name: fact_reviews
     description: One row per review per order.
