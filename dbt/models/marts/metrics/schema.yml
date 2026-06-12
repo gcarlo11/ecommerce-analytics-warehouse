@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: mart_sales_daily
+    description: Daily sales and operation KPIs.
+    columns:
+      - name: order_date
+        data_tests:
+          - unique
+          - not_null
+
+  - name: mart_customer_rfm
+    description: RFM segmentation per customer.
+    columns:
+      - name: customer_key
+        data_tests:
+          - unique
+          - not_null
+      - name: rfm_segment
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - champions
+                  - loyal_high_value
+                  - at_risk_high_value
+                  - one_time_buyer
+                  - standard
+
+  - name: mart_retention_cohort
+    description: Monthly customer cohort retention.
+    columns:
+      - name: cohort_month
+        data_tests:
+          - not_null
+
+  - name: mart_product_performance
+    description: Product category performance.
+
+  - name: mart_seller_scorecard
+    description: Seller performance and operational scorecard.
+    columns:
+      - name: seller_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: mart_shipping_sla
+    description: Daily shipping SLA metrics.
+    columns:
+      - name: order_date
+        data_tests:
+          - unique
+          - not_null
