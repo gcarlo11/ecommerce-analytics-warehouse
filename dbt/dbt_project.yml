@@ -1,0 +1,31 @@
+name: ecommerce_analytics_warehouse
+version: "1.0.0"
+config-version: 2
+
+profile: ecommerce_analytics_warehouse
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  ecommerce_analytics_warehouse:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+    marts:
+      core:
+        +schema: marts
+        +materialized: table
+      metrics:
+        +schema: marts
+        +materialized: table
