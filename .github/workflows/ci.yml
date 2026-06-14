@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: olist_warehouse
+          POSTGRES_USER: warehouse
+          POSTGRES_PASSWORD: warehouse
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      WAREHOUSE_HOST: localhost
+      WAREHOUSE_PORT: 5432
+      WAREHOUSE_DB: olist_warehouse
+      WAREHOUSE_USER: warehouse
+      WAREHOUSE_PASSWORD: warehouse
+      DBT_PROFILES_DIR: profiles
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run Python tests
+        run: |
+          pytest
+          ruff check .
+
+      - name: Load sample data
+        run: |
+          python -m src.loader.load_olist --data-dir data/samples --mode snapshot
+
+      - name: Run dbt build
+        run: |
+          dbt build --project-dir dbt
+
+      - name: Generate dbt docs
+        run: |
+          dbt docs generate --project-dir dbt
+
+      - name: Upload dbt artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-artifacts
+          path: |
+            dbt/target/manifest.json
+            dbt/target/run_results.json
+            dbt/target/catalog.json
